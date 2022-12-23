@@ -26,7 +26,6 @@ public class RequestSolicitation implements Serializable {
     private Date creationDate;
     private RequestStage requestStage;
     private User user;
-
     private List<com.softWalter.solicitation.domain.entities
             .RequestStage> requestStages = new ArrayList<>();
 }
