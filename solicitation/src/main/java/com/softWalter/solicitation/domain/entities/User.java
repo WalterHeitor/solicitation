@@ -19,10 +19,18 @@ public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(length = 75, nullable = false)
     private String name;
+    @Column(length = 75, nullable = false, unique = true)
     private String email;
+    @Column(length = 100, nullable = false)
     private String password;
-    private List<RequestSolicitation> requests = new ArrayList<>();
-    private List<RequestStage> requestStages = new ArrayList<>();
+    @Column(length = 75, nullable = false)
+    @Enumerated(EnumType.STRING)
     private Role role;
+    @OneToMany(mappedBy = "user")
+    private List<RequestSolicitation> requests = new ArrayList<>();
+    @OneToMany(mappedBy = "user")
+    private List<RequestStage> requestStages = new ArrayList<>();
+
 }
