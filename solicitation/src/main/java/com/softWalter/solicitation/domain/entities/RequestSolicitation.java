@@ -32,8 +32,8 @@ public class RequestSolicitation implements Serializable {
     @Enumerated(EnumType.STRING)
     private RequestStage requestStage;
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @JoinColumn(name = "owner_id", nullable = false)
+    private User owner;
     @OneToMany(mappedBy = "requestStage")
     private List<com.softWalter.solicitation.domain.entities
             .RequestStage> requestStages = new ArrayList<>();
