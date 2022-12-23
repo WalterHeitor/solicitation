@@ -18,10 +18,19 @@ public class RequestStage implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(columnDefinition = "text")
     private String description;
+    @Column(name = "realization_date", nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date realizationDate;
+    @Column(length = 75, nullable = false)
+    @Enumerated(EnumType.STRING)
     private com.softWalter.solicitation.domain.enums
             .RequestStage requestStage;
+    @ManyToOne
+    @JoinColumn(name = "request_soliciation_id")
     private RequestSolicitation requestSolicitation;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
     private  User user;
 }
