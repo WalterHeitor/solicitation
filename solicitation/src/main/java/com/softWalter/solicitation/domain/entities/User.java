@@ -1,9 +1,7 @@
 package com.softWalter.solicitation.domain.entities;
 
 import com.softWalter.solicitation.domain.enums.Role;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -12,6 +10,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter @Setter
 @Entity
 @Table(name = "tb_user")
 public class User implements Serializable {

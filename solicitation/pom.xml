@@ -16,6 +16,7 @@
 	<properties>
 		<java.version>17</java.version>
 	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -51,6 +52,15 @@
 			<version>4.13.2</version>
 			<scope>test</scope>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/pl.pojo/pojo-tester -->
+		<dependency>
+			<groupId>pl.pojo</groupId>
+			<artifactId>pojo-tester</artifactId>
+			<version>0.7.6</version>
+			<scope>test</scope>
+		</dependency>
+
+
 	</dependencies>
 
 	<build>
