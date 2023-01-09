@@ -1,7 +1,9 @@
 package com.softWalter.solicitation.domain.repositories;
 
 import com.softWalter.solicitation.domain.entities.RequestSolicitation;
+import com.softWalter.solicitation.domain.entities.RequestStage;
 import com.softWalter.solicitation.domain.entities.User;
+import com.softWalter.solicitation.template.RequestStageMockFactory;
 import com.softWalter.solicitation.template.requestsolicitation.RequestSolicitationMockFactory;
 import com.softWalter.solicitation.template.user.UserMockFacktory;
 import lombok.val;
@@ -25,18 +27,27 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 class RequestSolicitationRepositoryTest {
 
     @Autowired
+    private UserRepository userRepository;
+    private User user = UserMockFacktory.createNewUser();
+    @Autowired
     private RequestSolicitationRepository requestSolicitationRepository;
+    private List<RequestStage> requestStages = RequestStageMockFactory.createNewListStages();
     private List<RequestSolicitation> requestSolicitations = new ArrayList<RequestSolicitation>();
 
-    private RequestSolicitation requestSolicitation =
-            RequestSolicitationMockFactory.newRequestSolicitation(UserMockFacktory.createNewUser(), requestSolicitations);
+
 
 
     @Test
     @Order(0)
-    public void save_user_test(){
+    public void save_request_solicitation_test(){
 
+
+        User userTest = userRepository.save(user);
+        RequestSolicitation requestSolicitation =
+                RequestSolicitationMockFactory.newRequestSolicitation(
+                        userTest, requestStages);
         RequestSolicitation requestSolicitationTest = requestSolicitationRepository.save(requestSolicitation);
+
         assertThat(requestSolicitationTest.getId()).isEqualTo(1L);
     }
 }

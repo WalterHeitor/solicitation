@@ -15,8 +15,8 @@ public interface RequestSolicitationRepository extends JpaRepository<RequestSoli
 
     List<RequestSolicitation> findAllByOwnerId(Long Id);
 
-    @Transactional(readOnly = false)
-    @Modifying
-    @Query("UPDATE requestSolicitation SET requestStage = ?2 WHERE id = ?1")
+//    @Transactional(readOnly = false)
+//    @Modifying
+    @Query("UPDATE RequestSolicitation SET requestStage = ?2 WHERE id = ?1")
     RequestSolicitation updateStatus(Long id, RequestStage requestStage);
 }
