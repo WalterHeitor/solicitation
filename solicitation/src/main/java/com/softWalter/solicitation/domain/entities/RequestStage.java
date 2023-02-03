@@ -26,7 +26,7 @@ public class RequestStage implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date realizationDate;
     @Column(length = 75, nullable = false)
-    @Enumerated(EnumType.STRING)
+    //@Enumerated(EnumType.STRING)
     private com.softWalter.solicitation.domain.enums
             .RequestStage requestStage;
     @ManyToOne

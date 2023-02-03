@@ -42,7 +42,9 @@ class RequestSolicitationRepositoryTest {
     public void save_request_solicitation_test(){
 
 
-        User userTest = userRepository.save(user);
+ //       user.setId(2L);
+       // userRepository.save(user);
+        User userTest = userRepository.findById(1L).get();
         RequestSolicitation requestSolicitation =
                 RequestSolicitationMockFactory.newRequestSolicitation(
                         userTest, requestStages);

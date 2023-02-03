@@ -29,12 +29,12 @@ public class RequestSolicitation implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date creationDate;
     @Column(length = 75, nullable = false)
-    @Enumerated(EnumType.STRING)
+    //@Enumerated(EnumType.STRING)
     private RequestStage requestStage;
     @ManyToOne
     @JoinColumn(name = "owner_id", nullable = false)
     private User owner;
-    @OneToMany(mappedBy = "requestStage")
+    @OneToMany(mappedBy = "requestStage", fetch = FetchType.EAGER)
     private List<com.softWalter.solicitation.domain.entities
             .RequestStage> requestStages = new ArrayList<>();
 }

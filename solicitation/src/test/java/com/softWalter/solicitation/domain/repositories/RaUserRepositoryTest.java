@@ -19,7 +19,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 
-class UserRepositoryTest {
+class RaUserRepositoryTest {
 
     @Autowired
     private UserRepository userRepository;
