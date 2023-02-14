@@ -1,6 +1,6 @@
 package com.softWalter.solicitation.domain.enums;
 
-public enum RequestStage {
+public enum RequestState {
 
     OPEN("open order"),
     IN_PROGRESS("order in progress"),
@@ -9,7 +9,7 @@ public enum RequestStage {
     private String description;
 
 
-    RequestStage(String description) {
+    RequestState(String description) {
         this.description = description;
     }
 }

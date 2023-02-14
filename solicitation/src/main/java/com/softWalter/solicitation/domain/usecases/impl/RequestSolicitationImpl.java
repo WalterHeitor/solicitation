@@ -1,22 +1,23 @@
 package com.softWalter.solicitation.domain.usecases.impl;
 
 import com.softWalter.solicitation.domain.entities.RequestSolicitation;
-import com.softWalter.solicitation.domain.enums.RequestStage;
+import com.softWalter.solicitation.domain.enums.RequestState;
 import com.softWalter.solicitation.domain.repositories.RequestSolicitationRepository;
 import com.softWalter.solicitation.domain.usecases.UseCaseRequestSolicitation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-
+@Service
 public class RequestSolicitationImpl implements UseCaseRequestSolicitation {
     @Autowired
     RequestSolicitationRepository requestSolicitationRepository;
     @Override
     public RequestSolicitation save(RequestSolicitation requestSolicitation) {
 
-        requestSolicitation.setRequestStage(RequestStage.OPEN);
+        requestSolicitation.setRequestState(RequestState.OPEN);
         requestSolicitation.setCreationDate(new Date());
 
         RequestSolicitation createRequestSolicitation =

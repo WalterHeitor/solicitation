@@ -1,5 +1,6 @@
 package com.softWalter.solicitation.domain.entities;
 
+import com.softWalter.solicitation.domain.enums.RequestState;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,8 +28,7 @@ public class RequestStage implements Serializable {
     private Date realizationDate;
     @Column(length = 75, nullable = false)
     //@Enumerated(EnumType.STRING)
-    private com.softWalter.solicitation.domain.enums
-            .RequestStage requestStage;
+    private RequestState requestState;
     @ManyToOne
     @JoinColumn(name = "request_soliciation_id")
     private RequestSolicitation requestSolicitation;
