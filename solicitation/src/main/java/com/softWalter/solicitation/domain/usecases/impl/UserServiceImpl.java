@@ -16,6 +16,7 @@ public class UserServiceImpl implements UseCaseUserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Override
     public User saveUser(User user) {
 
         String hash = HashUtil.getSecurityHash(user.getPassword());
@@ -24,6 +25,7 @@ public class UserServiceImpl implements UseCaseUserService {
         return createdUser;
     }
 
+    @Override
     public User updateUser(User user) {
 
         String hash = HashUtil.getSecurityHash(user.getPassword());
@@ -32,19 +34,22 @@ public class UserServiceImpl implements UseCaseUserService {
         return updatedUser;
     }
 
+    @Override
     public User getById(Long id) {
 
         Optional<User> optionalUser = userRepository.findById(id);
         return optionalUser.isPresent() ? optionalUser.get() : null;
     }
 
+    @Override
     public List<User> listUsers() {
 
         List<User> users = userRepository.findAll();
         return users;
     }
 
-    User login(String email, String password) {
+    @Override
+    public User login(String email, String password) {
 
         password = HashUtil.getSecurityHash(password);
         Optional<User> optionalUser = userRepository.login(email, password);
