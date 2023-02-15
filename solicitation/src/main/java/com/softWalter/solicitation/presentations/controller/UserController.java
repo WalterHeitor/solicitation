@@ -1,6 +1,8 @@
 package com.softWalter.solicitation.presentations.controller;
 
+import com.softWalter.solicitation.domain.entities.RequestSolicitation;
 import com.softWalter.solicitation.domain.entities.User;
+import com.softWalter.solicitation.domain.usecases.UseCaseRequestSolicitation;
 import com.softWalter.solicitation.domain.usecases.UseCaseUserService;
 import com.softWalter.solicitation.presentations.controller.dto.UserLoginDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,8 @@ public class UserController {
 
     @Autowired
     private UseCaseUserService userService;
+    @Autowired
+    private UseCaseRequestSolicitation useCaseRequestSolicitation;
 
     @PostMapping
     public ResponseEntity<User> save(@RequestBody User user) {
@@ -41,14 +45,22 @@ public class UserController {
     }
 
     @GetMapping()
-    public ResponseEntity <List<User>> findAll() {
+    public ResponseEntity<List<User>> findAll() {
         List<User> users = userService.listUsers();
         return ResponseEntity.status(HttpStatus.OK).body(users);
     }
 
     @PostMapping("/login")
-    public ResponseEntity <User> login(@RequestBody UserLoginDTO userLoginDTO) {
+    public ResponseEntity<User> login(@RequestBody UserLoginDTO userLoginDTO) {
         User user = userService.login(userLoginDTO.getEmail(), userLoginDTO.getPassword());
         return ResponseEntity.status(HttpStatus.OK).body(user);
+    }
+
+    @GetMapping(value = "/{id}/requestSolicitation")
+    public ResponseEntity<List<RequestSolicitation>> listRequestSolicitationById(
+            @PathVariable(name = "id") Long id) {
+        List<RequestSolicitation> requestSolicitations =
+                useCaseRequestSolicitation.findAllByOwnerId(id);
+        return ResponseEntity.status(HttpStatus.OK).body(requestSolicitations);
     }
 }
