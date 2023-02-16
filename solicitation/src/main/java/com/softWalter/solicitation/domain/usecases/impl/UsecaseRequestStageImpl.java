@@ -6,11 +6,12 @@ import com.softWalter.solicitation.domain.repositories.RequestSolicitationReposi
 import com.softWalter.solicitation.domain.repositories.RequestStageRepository;
 import com.softWalter.solicitation.domain.usecases.UseCaseRequestStage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-
+@Service
 public class UsecaseRequestStageImpl implements UseCaseRequestStage {
 
     @Autowired

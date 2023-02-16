@@ -27,7 +27,7 @@ public class RequestStage implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date realizationDate;
     @Column(length = 75, nullable = false)
-    //@Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.STRING)
     private RequestState requestState;
     @ManyToOne
     @JoinColumn(name = "request_soliciation_id")

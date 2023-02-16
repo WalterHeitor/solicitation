@@ -34,7 +34,6 @@ public class RequestSolicitation implements Serializable {
     @ManyToOne
     @JoinColumn(name = "owner_id", nullable = false)
     private User owner;
-    @OneToMany(mappedBy = "requestStage", fetch = FetchType.EAGER)
-    private List<com.softWalter.solicitation.domain.entities
-            .RequestStage> requestStages = new ArrayList<>();
+    @OneToMany(mappedBy = "requestSolicitation", fetch = FetchType.LAZY)
+    private List<RequestStage> requestStages = new ArrayList<>();
 }
