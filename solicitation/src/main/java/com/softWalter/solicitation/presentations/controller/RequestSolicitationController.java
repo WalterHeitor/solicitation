@@ -1,7 +1,9 @@
 package com.softWalter.solicitation.presentations.controller;
 
 import com.softWalter.solicitation.domain.entities.RequestSolicitation;
+import com.softWalter.solicitation.domain.entities.RequestStage;
 import com.softWalter.solicitation.domain.usecases.UseCaseRequestSolicitation;
+import com.softWalter.solicitation.domain.usecases.UseCaseRequestStage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +17,8 @@ public class RequestSolicitationController {
 
     @Autowired
     private UseCaseRequestSolicitation useCaseRequestSolicitation;
+    @Autowired
+    private UseCaseRequestStage useCaseRequestStage;
 
     @PostMapping
     public ResponseEntity<RequestSolicitation> save(
@@ -48,6 +52,12 @@ public class RequestSolicitationController {
         List<RequestSolicitation> requestSolicitations =
                 useCaseRequestSolicitation.listAll();
         return ResponseEntity.status(HttpStatus.OK).body(requestSolicitations);
+    }
+
+    @GetMapping("/id/request-stages")
+    public ResponseEntity<List<RequestStage>> listAllStagesById(
+            @PathVariable(name="id") Long id) {
+        return ResponseEntity.ok(useCaseRequestStage.findAllByRequestId(id));
     }
 
 
