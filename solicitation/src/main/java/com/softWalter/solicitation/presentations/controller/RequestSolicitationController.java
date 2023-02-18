@@ -54,11 +54,9 @@ public class RequestSolicitationController {
         return ResponseEntity.status(HttpStatus.OK).body(requestSolicitations);
     }
 
-    @GetMapping("/id/request-stages")
+    @GetMapping("/{id}/request-stages")
     public ResponseEntity<List<RequestStage>> listAllStagesById(
             @PathVariable(name="id") Long id) {
         return ResponseEntity.ok(useCaseRequestStage.findAllByRequestId(id));
     }
-
-
 }

@@ -1,8 +1,10 @@
 package com.softWalter.solicitation.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.softWalter.solicitation.domain.enums.RequestState;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -34,6 +36,7 @@ public class RequestSolicitation implements Serializable {
     @ManyToOne
     @JoinColumn(name = "owner_id", nullable = false)
     private User owner;
+    @Getter(onMethod = @__({@JsonIgnore}))
     @OneToMany(mappedBy = "requestSolicitation", fetch = FetchType.LAZY)
     private List<RequestStage> requestStages = new ArrayList<>();
 }

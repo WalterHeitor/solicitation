@@ -1,5 +1,6 @@
 package com.softWalter.solicitation.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.softWalter.solicitation.domain.enums.Role;
 import lombok.*;
 
@@ -14,6 +15,7 @@ import java.util.Objects;
 @AllArgsConstructor
 @Getter @Setter
 @Entity
+@EqualsAndHashCode
 @Table(name = "tb_user")
 public class User implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -29,8 +31,10 @@ public class User implements Serializable {
     @Column(length = 75, nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role;
+    @Getter(onMethod = @__({@JsonIgnore}))
     @OneToMany(mappedBy = "owner")
     private List<RequestSolicitation> requestSolicitation = new ArrayList<>();
+    @Getter(onMethod = @__({@JsonIgnore}))
     @OneToMany(mappedBy = "owner")
     private List<RequestStage> requestStages = new ArrayList<>();
 
