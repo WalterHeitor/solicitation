@@ -4,6 +4,8 @@ import com.softWalter.solicitation.domain.entities.RequestSolicitation;
 import com.softWalter.solicitation.domain.entities.User;
 import com.softWalter.solicitation.domain.usecases.UseCaseRequestSolicitation;
 import com.softWalter.solicitation.domain.usecases.UseCaseUserService;
+import com.softWalter.solicitation.domain.usecases.model.PageModel;
+import com.softWalter.solicitation.domain.usecases.model.PageRequestModel;
 import com.softWalter.solicitation.presentations.controller.dto.UserLoginDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -45,9 +47,13 @@ public class UserController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<User>> findAll() {
-        List<User> users = userService.listUsers();
-        return ResponseEntity.status(HttpStatus.OK).body(users);
+    public ResponseEntity<PageModel<User>> findAll(
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size
+    ) {
+        PageRequestModel pageRequestModel = new PageRequestModel(page, size);
+        PageModel<User> userPageModel = userService.listAllOnLaziMode(pageRequestModel);
+        return ResponseEntity.status(HttpStatus.OK).body(userPageModel);
     }
 
     @PostMapping("/login")

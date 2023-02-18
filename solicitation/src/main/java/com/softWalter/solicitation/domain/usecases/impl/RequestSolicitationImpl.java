@@ -4,6 +4,7 @@ import com.softWalter.solicitation.domain.entities.RequestSolicitation;
 import com.softWalter.solicitation.domain.enums.RequestState;
 import com.softWalter.solicitation.domain.repositories.RequestSolicitationRepository;
 import com.softWalter.solicitation.domain.usecases.UseCaseRequestSolicitation;
+import com.softWalter.solicitation.domain.usecases.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,7 +37,8 @@ public class RequestSolicitationImpl implements UseCaseRequestSolicitation {
     public RequestSolicitation getById(Long id) {
         Optional<RequestSolicitation> optionalRequestSolicitation =
                 requestSolicitationRepository.findById(id);
-        return optionalRequestSolicitation.get();
+        return optionalRequestSolicitation.orElseThrow(
+                () -> new NotFoundException("There are not request solicitation with id " + id));
     }
 
     @Override

@@ -5,6 +5,7 @@ import com.softWalter.solicitation.domain.enums.RequestState;
 import com.softWalter.solicitation.domain.repositories.RequestSolicitationRepository;
 import com.softWalter.solicitation.domain.repositories.RequestStageRepository;
 import com.softWalter.solicitation.domain.usecases.UseCaseRequestStage;
+import com.softWalter.solicitation.domain.usecases.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,7 +39,8 @@ public class UsecaseRequestStageImpl implements UseCaseRequestStage {
     public RequestStage getById(Long id) {
         Optional<RequestStage> optionalRequestStage =
                 requestStageRepository.findById(id);
-        return optionalRequestStage.get();
+        return optionalRequestStage.orElseThrow(
+                () -> new NotFoundException("There are not request stage with id " + id));
     }
 
     @Override

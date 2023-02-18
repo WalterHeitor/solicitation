@@ -57,6 +57,8 @@ public class RequestSolicitationController {
     @GetMapping("/{id}/request-stages")
     public ResponseEntity<List<RequestStage>> listAllStagesById(
             @PathVariable(name="id") Long id) {
-        return ResponseEntity.ok(useCaseRequestStage.findAllByRequestId(id));
+        List<RequestStage> useCaseRequestStageAllByRequestId =
+                useCaseRequestStage.findAllByRequestId(id);
+        return ResponseEntity.ok(useCaseRequestStageAllByRequestId);
     }
 }
