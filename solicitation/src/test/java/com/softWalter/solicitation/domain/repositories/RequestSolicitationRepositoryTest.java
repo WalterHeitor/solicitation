@@ -14,6 +14,7 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ import java.util.List;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @RunWith(SpringRunner.class)
+@ActiveProfiles("test")
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class RequestSolicitationRepositoryTest {
@@ -43,7 +45,7 @@ class RequestSolicitationRepositoryTest {
 
 
  //       user.setId(2L);
-       // userRepository.save(user);
+        userRepository.save(user);
         User userTest = userRepository.findById(1L).get();
         RequestSolicitation requestSolicitation =
                 RequestSolicitationMockFactory.newRequestSolicitation(

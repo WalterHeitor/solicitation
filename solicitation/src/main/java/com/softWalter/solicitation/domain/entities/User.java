@@ -15,7 +15,7 @@ import java.util.Objects;
 @AllArgsConstructor
 @Getter @Setter
 @Entity
-@EqualsAndHashCode
+//@EqualsAndHashCode
 @Table(name = "tb_user")
 public class User implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -24,7 +24,7 @@ public class User implements Serializable {
     private Long id;
     @Column(length = 75, nullable = false)
     private String name;
-    @Column(length = 75, nullable = false, unique = true)
+    @Column(length = 75, nullable = false) //unique = true
     private String email;
     @Column(length = 100, nullable = false)
     private String password;

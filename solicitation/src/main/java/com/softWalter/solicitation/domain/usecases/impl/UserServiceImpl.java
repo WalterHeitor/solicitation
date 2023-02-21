@@ -76,4 +76,9 @@ public class UserServiceImpl implements UseCaseUserService {
         return optionalUser.isPresent() ? optionalUser.get() : null;
     }
 
+    @Override
+    public int updateRole(User user) {
+        return userRepository.updateRole(user.getId(), user.getRole());
+    }
+
 }

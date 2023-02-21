@@ -7,11 +7,13 @@ import com.softWalter.solicitation.domain.usecases.UseCaseUserService;
 import com.softWalter.solicitation.domain.usecases.model.PageModel;
 import com.softWalter.solicitation.domain.usecases.model.PageRequestModel;
 import com.softWalter.solicitation.presentations.controller.dto.UserLoginDTO;
+import com.softWalter.solicitation.presentations.controller.dto.UserUpdateRoleDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -57,7 +59,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<User> login(@RequestBody UserLoginDTO userLoginDTO) {
+    public ResponseEntity<User> login(@RequestBody @Valid UserLoginDTO userLoginDTO) {
         User user = userService.login(userLoginDTO.getEmail(), userLoginDTO.getPassword());
         return ResponseEntity.status(HttpStatus.OK).body(user);
     }
@@ -68,5 +70,17 @@ public class UserController {
         List<RequestSolicitation> requestSolicitations =
                 useCaseRequestSolicitation.findAllByOwnerId(id);
         return ResponseEntity.status(HttpStatus.OK).body(requestSolicitations);
+    }
+    @PatchMapping("role/{id}")
+    public ResponseEntity<?> updateRole(
+            @PathVariable(name = "id") Long id,
+            @RequestBody UserUpdateRoleDTO userUpdateRoleDTO
+    ) {
+
+        User user = new User();
+        user.setId(id);
+        user.setRole(userUpdateRoleDTO.getRole());
+        userService.updateRole(user);
+        return ResponseEntity.ok(user);
     }
 }

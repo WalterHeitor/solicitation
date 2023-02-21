@@ -11,7 +11,7 @@ services:
 #      MYSQL_ROOT_PASSWORD: admin1234
 #      MYSQL_RANDOM_ROOT_PASSWORD: root
 #      MYSQL_ALLOW_EMPTY_PASSWORD: 1
-      MYSQL_DATABASE: rest_spring_kotlin
+      MYSQL_DATABASE: solicitation
 #      MYSQL_USER: root
       MYSQL_DB_USER: root
       MYSQL_PASSWORD: admin1234

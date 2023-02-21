@@ -12,7 +12,7 @@ public class UserMockFacktory {
                 "walter",
                 "walter@gmail.com",
                 "123",
-                Role.ADMINISTRATOR,
+                Role.END_USER,
                 null,
                 null
         );

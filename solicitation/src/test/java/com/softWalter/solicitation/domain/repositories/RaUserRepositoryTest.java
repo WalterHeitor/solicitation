@@ -1,6 +1,7 @@
 package com.softWalter.solicitation.domain.repositories;
 
 import com.softWalter.solicitation.domain.entities.User;
+import com.softWalter.solicitation.domain.enums.Role;
 import com.softWalter.solicitation.template.user.UserMockFacktory;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -9,6 +10,8 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Profile;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
@@ -16,7 +19,8 @@ import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@ActiveProfiles("test")
+@SpringBootTest()
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 
 class RaUserRepositoryTest {
@@ -30,7 +34,8 @@ class RaUserRepositoryTest {
     @Order(0)
     public void save_user_test(){
 
-        User userTest = userRepository.save(user);
+        User userTest = userRepository.save(new User(null, "Walterheirtor",
+                "whfol@hemail", "123456", Role.END_USER, null, null));
         assertThat(userTest.getId()).isEqualTo(1L);
     }
 
@@ -38,7 +43,6 @@ class RaUserRepositoryTest {
     @Order(1)
     public void update_user_test(){
 
-        System.out.println(user.getId() + "Aki esta Id user");
         user.setId(1L);
         user.setName(testFake);
         User userTest = userRepository.save(user);
@@ -72,5 +76,11 @@ class RaUserRepositoryTest {
         assertThat(userTest.get().getName()).isEqualTo(testFake);
         assertThat(userTest.get().getEmail()).isEqualTo(email);
         assertThat(userTest.get().getPassword()).isEqualTo(password);
+    }
+    @Test
+    @Order(5)
+    void update_role_test() {
+        int affectedRows = userRepository.updateRole(1L, Role.ADMINISTRATOR);
+        assertThat(affectedRows).isEqualTo(1);
     }
 }

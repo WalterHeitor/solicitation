@@ -14,4 +14,5 @@ public interface UseCaseUserService {
     List<User> listUsers();
     PageModel<User> listAllOnLaziMode(PageRequestModel pageRequestModel);
     User login(String email, String password);
+    int updateRole(User user);
 }
