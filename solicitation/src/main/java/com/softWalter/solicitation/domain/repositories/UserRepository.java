@@ -14,10 +14,12 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("SELECT u FROM User u WHERE u.email =?1 AND u.password =?2")
-    public Optional<User> login(String email, String password);
+    Optional<User> login(String email, String password);
 
     @Transactional(readOnly = false)
     @Modifying
     @Query("UPDATE User u SET u.role = ?2 WHERE u.id = ?1")
-    public int updateRole(Long id, Role role);
+    int updateRole(Long id, Role role);
+
+    Optional<User> findByEmail(String email);
 }

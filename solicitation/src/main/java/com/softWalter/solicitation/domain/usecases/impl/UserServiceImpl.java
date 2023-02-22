@@ -11,8 +11,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,24 +26,28 @@ import java.util.Optional;
 public class UserServiceImpl implements UseCaseUserService {
 
     @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+
+    public UserServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    private User getUser(User user) {
+        String hash = HashUtil.getSecurityHash(user.getPassword());
+        user.setPassword(hash);
+        return userRepository.save(user);
+    }
 
     @Override
     public User saveUser(User user) {
 
-        String hash = HashUtil.getSecurityHash(user.getPassword());
-        user.setPassword(hash);
-        User createdUser = userRepository.save(user);
-        return createdUser;
+        return getUser(user);
     }
 
     @Override
     public User updateUser(User user) {
 
-        String hash = HashUtil.getSecurityHash(user.getPassword());
-        user.setPassword(hash);
-        User updatedUser = userRepository.save(user);
-        return updatedUser;
+        return getUser(user);
     }
 
     @Override
@@ -51,8 +61,7 @@ public class UserServiceImpl implements UseCaseUserService {
     @Override
     public List<User> listUsers() {
 
-        List<User> users = userRepository.findAll();
-        return users;
+        return userRepository.findAll();
     }
 
     @Override
@@ -60,12 +69,11 @@ public class UserServiceImpl implements UseCaseUserService {
         Pageable pageable =
                 PageRequest.of(pageRequestModel.getPage(), pageRequestModel.getSize());
         Page<User> userPage = userRepository.findAll(pageable);
-        PageModel<User> userPageModel = new PageModel<>(
+        return new PageModel<>(
                 userPage.getTotalElements(),
                 userPage.getSize(),
                 userPage.getTotalPages(),
                 userPage.getContent());
-        return userPageModel;
     }
 
     @Override
@@ -73,7 +81,7 @@ public class UserServiceImpl implements UseCaseUserService {
 
         password = HashUtil.getSecurityHash(password);
         Optional<User> optionalUser = userRepository.login(email, password);
-        return optionalUser.isPresent() ? optionalUser.get() : null;
+        return optionalUser.orElseThrow(() -> new NotFoundException("User not present" + email));
     }
 
     @Override
@@ -81,4 +89,19 @@ public class UserServiceImpl implements UseCaseUserService {
         return userRepository.updateRole(user.getId(), user.getRole());
     }
 
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Optional<User> optionalUser = userRepository.findByEmail(username);
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            List<GrantedAuthority> grantedAuthorities = List.of(new SimpleGrantedAuthority("ROLE " + user.getRole().name()));
+            return new org.springframework.security.core.userdetails.User(
+                    user.getEmail(),
+                    user.getPassword(),
+                    grantedAuthorities
+            );
+        } else {
+            throw new UsernameNotFoundException("Dosen't exist for username " + username);
+        }
+    }
 }
