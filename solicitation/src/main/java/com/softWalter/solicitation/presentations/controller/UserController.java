@@ -2,6 +2,7 @@ package com.softWalter.solicitation.presentations.controller;
 
 import com.softWalter.solicitation.domain.entities.RequestSolicitation;
 import com.softWalter.solicitation.domain.entities.User;
+import com.softWalter.solicitation.domain.security.AccessManager;
 import com.softWalter.solicitation.domain.security.JwtManager;
 import com.softWalter.solicitation.domain.usecases.UseCaseRequestSolicitation;
 import com.softWalter.solicitation.domain.usecases.UseCaseUserService;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -36,6 +38,8 @@ public class UserController {
     AuthenticationManager authenticationManager;
     @Autowired
     private JwtManager jwtManager;
+    @Autowired
+    private AccessManager accessManager;
 
     @Secured({"ROLE_ADMINISTRATOR"})
     @PostMapping
@@ -44,6 +48,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(createUser);
     }
 
+    @PreAuthorize("@accessManager.isOwner(#id)")
     @PutMapping(value = "/{id}")
     public ResponseEntity<User> update(
             @PathVariable(name = "id") Long id,

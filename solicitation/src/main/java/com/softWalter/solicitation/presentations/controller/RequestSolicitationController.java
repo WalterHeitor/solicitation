@@ -2,11 +2,13 @@ package com.softWalter.solicitation.presentations.controller;
 
 import com.softWalter.solicitation.domain.entities.RequestSolicitation;
 import com.softWalter.solicitation.domain.entities.RequestStage;
+import com.softWalter.solicitation.domain.security.AccessManager;
 import com.softWalter.solicitation.domain.usecases.UseCaseRequestSolicitation;
 import com.softWalter.solicitation.domain.usecases.UseCaseRequestStage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +21,8 @@ public class RequestSolicitationController {
     private UseCaseRequestSolicitation useCaseRequestSolicitation;
     @Autowired
     private UseCaseRequestStage useCaseRequestStage;
+    @Autowired
+    private AccessManager accessManager;
 
     @PostMapping
     public ResponseEntity<RequestSolicitation> save(
@@ -28,6 +32,8 @@ public class RequestSolicitationController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(createRequest);
     }
+
+    @PreAuthorize("@accessManager.isRequestOwner(#id)")
     @PutMapping(value = "/{id}")
     public ResponseEntity<RequestSolicitation> update(
             @PathVariable(name = "id") Long id,
