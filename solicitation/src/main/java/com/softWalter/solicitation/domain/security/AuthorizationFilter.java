@@ -26,7 +26,9 @@ import java.util.List;
 
 public class AuthorizationFilter extends OncePerRequestFilter {
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    FilterChain filterChain) throws ServletException, IOException {
         String jwt = request.getHeader(HttpHeaders.AUTHORIZATION);
         if (jwt == null || !jwt.startsWith(SecurityConstan.JWT_PROVIDER)) {
             ApiError apiError;
@@ -41,7 +43,7 @@ public class AuthorizationFilter extends OncePerRequestFilter {
 
             writer.write(apiErrorString);
 
-            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
 
             return ;
@@ -77,5 +79,6 @@ public class AuthorizationFilter extends OncePerRequestFilter {
 
             return ;
         }
+        filterChain.doFilter(request, response);
     }
 }

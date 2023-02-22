@@ -32,7 +32,7 @@ public class JwtManager {
     public Claims parseToken(String jwt) throws JwtException {
 
         return Jwts.parser()
-                .setSigningKey(SecurityConstan.API_KEY.getBytes(StandardCharsets.UTF_8))
+                .setSigningKey(SecurityConstan.API_KEY.getBytes())
                 .parseClaimsJws(jwt)
                 .getBody();
     }

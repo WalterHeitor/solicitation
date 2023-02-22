@@ -13,6 +13,7 @@ import com.softWalter.solicitation.presentations.controller.dto.UserUpdateRoleDT
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -36,6 +37,7 @@ public class UserController {
     @Autowired
     private JwtManager jwtManager;
 
+    @Secured({"ROLE_ADMINISTRATOR"})
     @PostMapping
     public ResponseEntity<User> save(@RequestBody User user) {
         User createUser = userService.saveUser(user);
@@ -97,6 +99,8 @@ public class UserController {
                 useCaseRequestSolicitation.findAllByOwnerId(id);
         return ResponseEntity.status(HttpStatus.OK).body(requestSolicitations);
     }
+
+    @Secured({"ROLE_ADMINISTRATOR"})
     @PatchMapping("role/{id}")
     public ResponseEntity<User> updateRole(
             @PathVariable(name = "id") Long id,
