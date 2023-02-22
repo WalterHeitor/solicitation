@@ -2,19 +2,26 @@ package com.softWalter.solicitation.presentations.controller;
 
 import com.softWalter.solicitation.domain.entities.RequestSolicitation;
 import com.softWalter.solicitation.domain.entities.User;
+import com.softWalter.solicitation.domain.security.JwtManager;
 import com.softWalter.solicitation.domain.usecases.UseCaseRequestSolicitation;
 import com.softWalter.solicitation.domain.usecases.UseCaseUserService;
 import com.softWalter.solicitation.domain.usecases.model.PageModel;
 import com.softWalter.solicitation.domain.usecases.model.PageRequestModel;
 import com.softWalter.solicitation.presentations.controller.dto.UserLoginDTO;
+import com.softWalter.solicitation.presentations.controller.dto.UserLoginResponse;
 import com.softWalter.solicitation.presentations.controller.dto.UserUpdateRoleDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "softwalter/v1/users")
@@ -24,6 +31,10 @@ public class UserController {
     private UseCaseUserService userService;
     @Autowired
     private UseCaseRequestSolicitation useCaseRequestSolicitation;
+    @Autowired
+    AuthenticationManager authenticationManager;
+    @Autowired
+    private JwtManager jwtManager;
 
     @PostMapping
     public ResponseEntity<User> save(@RequestBody User user) {
@@ -59,9 +70,24 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<User> login(@RequestBody @Valid UserLoginDTO userLoginDTO) {
-        User user = userService.login(userLoginDTO.getEmail(), userLoginDTO.getPassword());
-        return ResponseEntity.status(HttpStatus.OK).body(user);
+    public ResponseEntity<UserLoginResponse> login(@RequestBody @Valid UserLoginDTO userLoginDTO) {
+
+        UsernamePasswordAuthenticationToken token =
+                new UsernamePasswordAuthenticationToken(
+                        userLoginDTO.getEmail(), userLoginDTO.getPassword());
+        Authentication authenticate = authenticationManager.authenticate(token);
+
+        SecurityContextHolder.getContext().setAuthentication(authenticate);
+
+        org.springframework.security.core.userdetails.User userSpring;
+        userSpring = (org.springframework.security.core.userdetails.User) authenticate.getPrincipal();
+        String email = userSpring.getUsername();
+        List<String> roles = userSpring.getAuthorities()
+                .stream()
+                .map(grantedAuthority -> grantedAuthority.getAuthority())
+                .collect(Collectors.toList());
+
+        return ResponseEntity.status(HttpStatus.OK).body(jwtManager.createToken(email, roles));
     }
 
     @GetMapping(value = "/{id}/requestSolicitation")
@@ -72,7 +98,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(requestSolicitations);
     }
     @PatchMapping("role/{id}")
-    public ResponseEntity<?> updateRole(
+    public ResponseEntity<User> updateRole(
             @PathVariable(name = "id") Long id,
             @RequestBody UserUpdateRoleDTO userUpdateRoleDTO
     ) {

@@ -4,6 +4,7 @@ import com.softWalter.solicitation.domain.usecases.exception.NotFoundException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -25,6 +26,17 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
                 notFoundException.getMessage(),
                 new Date());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiError);
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ApiError> handleBadCredentialsException(
+            BadCredentialsException badCredentialsException) {
+
+        ApiError apiError = new ApiError(
+                HttpStatus.UNAUTHORIZED.value(),
+                badCredentialsException.getMessage(),
+                new Date());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(apiError);
     }
 
     @Override
